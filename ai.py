@@ -1,7 +1,7 @@
 from flask import Flask, request
 from structs import Player, PlayerInfo, Tile, TileContent, Point
 import json
-from queue import Queue
+from Queue import Queue
 # from search import Search
 # import numpy as np
 import networkx as nx
@@ -40,8 +40,8 @@ def bfs(m, g, start, gohome):
 
 
 def do_something(p, m, g):
-    print(p.__dict__)
-    print_map(m)
+    #print(p.__dict__)
+    #print_map(m)
     # print(g.nodes())
 
     player_pos = (p.Position.to_tuple()[0] - m[0][0].x, p.Position.to_tuple()[1] - m[0][0].y)
