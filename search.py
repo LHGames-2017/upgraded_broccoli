@@ -10,11 +10,22 @@ class Search():
         self.home_ressources = player.Score - player.CarriedRessources
         self.total_ressources = self.home_ressources + player.CarriedRessources
         # list of objectives [ (prix, UpgradeType) ]
+        # ordre initial (peaceful mode ) : cap, cap, cap, speed, speed, speed, cap, cap, speed, speed
         self.upgrade_queue = [
-                (15000, "structs.UpgradeType.CarryingCapacity")
-
+                (15000, "structs.UpgradeType.CarryingCapacity"),
+                (50000, "structs.UpgradeType.CarryingCapacity"),              
+                (100000, "structs.UpgradeType.CarryingCapacity"), 
+                (15000, "structs.UpgradeType.CollectingSpeed"), 
+                (50000, "structs.UpgradeType.CollectingSpeed"), 
+                (100000, "structs.UpgradeType.CollectingSpeed"), 
+                (250000, "structs.UpgradeType.CarryingCapacity"), 
+                (500000, "structs.UpgradeType.CarryingCapacity"), 
+                (250000, "structs.UpgradeType.CollectingSpeed"), 
+                (500000, "structs.UpgradeType.CollectingSpeed"), 
                 ]
+        
 
+ 
     # Return all nodes from start to end
     def astar(self, start, end):
         return nx.astar_path(self.graph, start, end)
