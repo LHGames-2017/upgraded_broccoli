@@ -12,6 +12,6 @@ class Search():
     
     # 
     def breadth_search(self):
-        return nx.algorithms.coloring.strategy_connected_sequential()
+        return nx.algorithms.coloring.strategy_connected_sequential(self.graph, "", traversal='bfs')
 
 
