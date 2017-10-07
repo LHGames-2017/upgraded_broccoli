@@ -82,11 +82,16 @@ class Search():
     def bfs(self, tile_type):
         player_pos = self.player.Position.to_tuple()
         top_corner = (self.the_map[0][0].x, self.the_map[0][0].y)
-        print(tuple(x-y for x, y in zip(player_pos, top_corner)))
+        # print(player_pos)
+        # print(top_corner)
+        # print(tuple(x-y for x, y in zip(player_pos, top_corner)))
+        # print(tuple(x-y for x, y in zip(player_pos, top_corner)))
         bfs_gen = nx.bfs_edges(self.graph, tuple(x-y for x, y in zip(player_pos, top_corner)))
         for node in bfs_gen:
-            if self.the_map[node[1]][node[0]].content == tile_type:
+            content = self.the_map[node[1][1]][node[1][0]].content
+            if content == tile_type:
                 return self.astar(self.player.Position.to_tuple, node)
+            # self.graph.remove_node()
                 # print(self.astar(self.player.Position.to_tuple, node))
                 # print([tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)])
                 # return [tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)]
