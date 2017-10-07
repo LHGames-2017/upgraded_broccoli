@@ -98,7 +98,7 @@ def bot():
 
             otherPlayers.append({player_name: player_info })
     
-    ### BISOUS
+    ### >:(
     path = []
     if len(path) == 0:
         s = Search(graph, deserialized_map, player)
