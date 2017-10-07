@@ -21,7 +21,7 @@ def manhattan_dist(start, end):
     return abs(ex - sx) + abs(ey - sy)
 
 
-def bfs(m, g, start, gohome):
+def bfs(m, g, start, tile):
     frontier = Queue()
     frontier.put(start)
     visited = {}
@@ -31,40 +31,53 @@ def bfs(m, g, start, gohome):
         current = frontier.get()
         for n in g.neighbors(current):
             if n not in visited:
-                if gohome and m[n[1]][n[0]].content == TileContent.House:
-                    return n
-                elif not gohome and m[n[1]][n[0]].content == TileContent.Resource:
+                if m[n[1]][n[0]].content == tile:
                     return n
                 frontier.put(n)
                 visited[n] = True
 
 
 def do_something(p, m, g):
-    #print(p.__dict__)
-    #print_map(m)
+    # print(p.__dict__)
+    # print_map(m)
     # print(g.nodes())
 
+    goal_tile = None
+    if p.CarriedRessources < p.CarryingCapacity:
+        goal_tile = TileContent.Resource
+    else:
+        goal_tile = TileContent.House
+
     player_pos = (p.Position.to_tuple()[0] - m[0][0].x, p.Position.to_tuple()[1] - m[0][0].y)
-    dest_pos = bfs(m, g, player_pos, p.CarriedRessources == p.CarryingCapacity)
+
+    dest_pos = bfs(m, g, player_pos, goal_tile)
+    if dest_pos is None:
+        goal_tile = TileContent.Wall
+        g = create_graph(m, True)
+        dest_pos = bfs(m, g, player_pos, goal_tile)
+
     next_pos = nx.astar_path(g, player_pos, dest_pos)[1]
 
     # print(player_pos)
     # print(dest_pos)
     # print(next_pos)
+
     if next_pos == dest_pos:
-        if (p.CarriedRessources < p.CarryingCapacity):
+        if (goal_tile == TileContent.Resource):
             return p.collect(Point(next_pos[0] + m[0][0].x, next_pos[1] + m[0][0].y))
+        elif (goal_tile == TileContent.Wall):
+            return p.attack(Point(next_pos[0] + m[0][0].x, next_pos[1] + m[0][0].y))
     return p.move(Point(next_pos[0] + m[0][0].x, next_pos[1] + m[0][0].y))
 
 
-def create_graph(tiles):
+def create_graph(tiles, withWalls):
     graph = nx.grid_graph([20, 20])
 
     for i in range(20):
         for j in range(20):
             if tiles[i][j].content == TileContent.Lava:
                 graph.remove_node((j, i))
-            elif tiles[i][j].content == TileContent.Wall:
+            elif not withWalls and tiles[i][j].content == TileContent.Wall:
                 graph.remove_node((j, i))
             # elif tiles[i][j].content == TileContent.Player:
                 # graph.remove_node((j, i))
@@ -120,7 +133,7 @@ def bot():
     # Map
     serialized_map = map_json["CustomSerializedMap"]
     deserialized_map = deserialize_map(serialized_map)
-    graph = create_graph(deserialized_map)
+    graph = create_graph(deserialized_map, False)
 
     # print(deserialized_map)
     # print(player.__dict__)
@@ -133,6 +146,8 @@ def bot():
     for player_dict in map_json["OtherPlayers"]:
         for player_name in player_dict.keys():
             player_info = player_dict[player_name]
+            if player_info == "notAPlayer":
+                continue
             p_pos = player_info["Position"]
             # print("\n\n\n", p_pos)
             player_info = PlayerInfo(player_info["Health"],
