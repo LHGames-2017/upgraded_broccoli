@@ -1,7 +1,6 @@
 from flask import Flask, request
-from structs import *
+from structs import Player, PlayerInfo, Tile, Point
 import json
-# import numpy as np
 
 app = Flask(__name__)
 
@@ -18,7 +17,7 @@ def deserialize_map(serialized_map):
     serialized_map = serialized_map[1:]
     rows = serialized_map.split('[')
     column = rows[0].split('{')
-    deserialized_map = [[Tile() for x in range(20)] for y in range(20)] # TODO
+    deserialized_map = [[Tile() for x in range(20)] for y in range(20)]
     for i in range(len(rows) - 1):
         column = rows[i + 1].split('{')
 
