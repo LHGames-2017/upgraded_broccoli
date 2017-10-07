@@ -102,17 +102,19 @@ def bot():
 
     ### BOT EXECUTION
     # cherche prochaine action si path est vide
-    if len(path) == 0:
+    if len(path) == 0 and len(lastaction) == 0:
         s = Search(graph, deserialized_map, player)
-        path, lastaction = s.find_best_decision()
+        path, action = s.find_best_decision()
 
+        
+        
+        if len(path) == 0:
+            return eval(lastaction)
+    
     # move to tile adjacent to last action
-    while path:
-        target = path.pop(0)
-        player.move(target)
+    target = path.pop(0)
+    return player.move(target)
 
-    # execute last action
-    eval(lastaction)
 
 
 @app.route("/", methods=["POST"])

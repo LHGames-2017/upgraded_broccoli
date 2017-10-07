@@ -24,14 +24,6 @@ class Search():
                 'purchase' : 'player.purchase(',
                 'heal' : 'player.heal('
                 }
-        self.total_ressources = self.home_ressources + player.CarriedRessources
-        self.home_interests_points = {}
-        self.interest_points = {}
-        # list of objectives [ (condition, action) ]
-        self.upgrade_queue = [
-            ("self.total_ressources == 15000", "self.go_upgrade('structs.UpgradeType.CarryingCapacity')"), # update carrying capacity
-            ("self.total_ressources == 15000", "self.go_upgrade()")
-        ]
 
     # Return all nodes from start to end
     def astar(self, start, end):
@@ -57,9 +49,6 @@ class Search():
         # find if capacity is full
         if self.player.CarriedRessources == self.player.CarryingCapacity:
             return self.transform_path(self.go_home(), self.action_list['move'])
-        else:
-
-        
             
         
 
@@ -69,14 +58,10 @@ class Search():
         self.find_mine()
 
     # find closets mining ressources
+    # TODO garder mine trouvee en memoire et pas toujours rappeler
     def find_mine(self):
         action = self.action_list['collect']
         return self.transform_path(self.bfs(structs.TileContent.Resource), action)
-
-    # go to upgrade
-    def go_upgrade(self, upgrade_type):
-        action = self.action_list['upgrade'] + upgrade_type
-        return self.transform_path(self.go_home(), action)
 
     # breadth first search
     def bfs(self, tile_type):
