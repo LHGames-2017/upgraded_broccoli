@@ -1,8 +1,14 @@
 from flask import Flask, request
 from structs import *
 import json
+# import numpy as np
 
 app = Flask(__name__)
+
+
+def print_map(m):
+    for i in range(len(m)):
+        print([tile.content.name[0] for tile in m[i]])
 
 
 def deserialize_map(serialized_map):
@@ -12,17 +18,17 @@ def deserialize_map(serialized_map):
     serialized_map = serialized_map[1:]
     rows = serialized_map.split('[')
     column = rows[0].split('{')
-    deserialized_map = [[Tile() for x in range(40)] for y in range(40)]
+    deserialized_map = [[Tile() for x in range(20)] for y in range(20)] # TODO
     for i in range(len(rows) - 1):
         column = rows[i + 1].split('{')
 
         for j in range(len(column) - 1):
             infos = column[j + 1].split(',')
             end_index = infos[2].find('}')
-            content = int(infos[0])
             x = int(infos[1])
             y = int(infos[2][:end_index])
-            deserialized_map[i][j] = Tile(content, x, y)
+            content = int(infos[0])
+            deserialized_map[i][j] = Tile(x, y, content)
 
     return deserialized_map
 
@@ -50,7 +56,8 @@ def bot():
     serialized_map = map_json["CustomSerializedMap"]
     deserialized_map = deserialize_map(serialized_map)
 
-    print(deserialized_map)
+    # print(deserialized_map)
+    print_map(deserialized_map)
 
     otherPlayers = []
 
