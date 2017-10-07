@@ -1,6 +1,7 @@
 from flask import Flask, request
 from structs import *
 import json
+import Search
 # import numpy as np
 
 app = Flask(__name__)
@@ -75,6 +76,7 @@ def bot():
             otherPlayers.append({player_name: player_info })
 
     # return decision
+    bot = Search.
     return player.move(Point(0, 1))
 
 

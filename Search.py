@@ -2,7 +2,7 @@ import networkx as nx
 import structs
 
 class Search():
-    def __init__(self, graph, the_map,player):
+    def __init__(self, graph, the_map, player):
         self.graph = graph
         self.the_map = the_map
         self.player = player
@@ -14,7 +14,7 @@ class Search():
         self.interest_points = {}
         # list of objectives [ (condition, action) ]
         self.upgrade_queue = [
-                ("self.total_ressources == 15000", "self.go_upgrade('CarryingCapacity')"), # update carrying capacity
+                ("self.total_ressources == 15000", "self.go_upgrade('structs.UpgradeType.CarryingCapacity')"), # update carrying capacity
                 ("self.total_ressources == 15000", "self.go_upgrade()")
                     
 
@@ -46,24 +46,33 @@ class Search():
             action = self.upgrade_queue[0][1]
             self.upgrade_queue.pop(0)
             eval(action)
-
-
     
 
     # find closets mining ressources
     def find_mine(self):
-        pass
+        a = "player.collect("
+        return self.transform_path(self.bfs(structs.TileContent.Resource))
+
     # go to upgrade
     def go_upgrade(self, upgrade_type):
-        action = "player.upgrade(" + upgrade_type + ")"
-        return (self.go_home(), action)
+        action = "player.upgrade(" + upgrade_type
+        return self.transform_path(self.go_home(), action)
 
 
-        return 
-
-
+    # breadth first search
     def bfs(self, tile_type):
-        bfs_gen = nx.bfs_edges(self.graph,self.pos)
+        bfs_gen = nx.bfs_edges(self.graph, self.pos)
         for node in bfs_gen:
-            if the_map[node[1]][node[0]].content == tile_type:
-                return astar(self.player.Position.to_tuple,node)
+            if self.the_map[node[1]][node[0]].content == tile_type:
+                return self.astar(self.player.Position.to_tuple,node)
+
+    # transform a path, to last Point, the rest
+    def transform_path(self, path, action):
+        movepath = [structs.Point(i,j) for (i,j) in path]
+        movepath, lastpoint = movepath[:-1], movepath[-1]
+        lastpoint = lastpoint.to_tuple()
+        newaction = action + "Point(" + str(lastpoint[0]) + "," str(lastpoint[1]) + ")"
+        # reste a faire des move pour tous les points dans movepath, et on eval newaction
+        return (movepath, newaction)
+
+
