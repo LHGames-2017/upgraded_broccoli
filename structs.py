@@ -1,22 +1,22 @@
 import math
 
-class ActionTypes():
+class ActionTypes:
     DefaultAction, MoveAction, AttackAction, CollectAction, UpgradeAction, StealAction, PurchaseAction = range(7)
 
 
-class UpgradeType():
+class UpgradeType:
     CarryingCapacity, AttackPower, Defence, MaximumHealth, CollectingSpeed = range(5)
 
 
-class TileType():
+class TileType:
     Tile, Wall, House, Lava, Resource, Shop = range(6)
 
 
-class TileContent():
+class TileContent:
     Empty, Resource, House, Player, Wall, Lava, Shop = range(7)
 
 
-class Point(object):
+class Point:
 
     # Constructor
     def __init__(self, X=0, Y=0):
@@ -40,7 +40,7 @@ class Point(object):
         return math.sqrt(math.pow(delta_x, 2) + math.pow(delta_y, 2))
 
 
-class GameInfo(object):
+class GameInfo:
 
     def __init__(self, json_dict):
         self.__dict__ = json_dict
@@ -49,7 +49,7 @@ class GameInfo(object):
         self.Players = dict()
 
 
-class Tile(object):
+class Tile:
 
     def __init__(self, content=None, x=0, y=0):
         self.Content = content
@@ -57,7 +57,7 @@ class Tile(object):
         self.Y = y
 
 
-class Player(object):
+class Player:
 
     def __init__(self, health, maxHealth, position, houseLocation, score, carriedRessources,
                  carryingCapacity=1000):
@@ -70,14 +70,14 @@ class Player(object):
         self.CarryingCapacity = carryingCapacity
 
 
-class PlayerInfo(object):
+class PlayerInfo:
 
     def __init__(self, health, maxHealth, position):
         self.Health = health
         self.MaxHealth = maxHealth
         self.Position = position
 
-class ActionContent(object):
+class ActionContent:
 
     def __init__(self, action_name, content):
         self.ActionName = action_name
