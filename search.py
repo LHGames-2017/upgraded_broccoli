@@ -41,9 +41,9 @@ class Search():
             return self.transform_path(self.go_home(), "MoveAction")
         else:
             return self.find_mine()
-            
-        
 
+        return self.find_mine()
+            
     # find best_decision
     def find_best_decision(self):
         self.indispendable_checks()
@@ -68,16 +68,18 @@ class Search():
                 # print(self.astar(self.player.Position.to_tuple, node))
                 # print([tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)])
                 # return [tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)]
+    
 
     # transform a path, to last Point, the rest
     def transform_path(self, path, action, item=""):
         movepath = [structs.Point(i,j) for (i,j) in path]
+        print(movepath)
         # gerer le cas si path de 1 point seulement
         actionpath = []
         while len(movepath) > 1:
             actionpath.append(structs.create_action("MoveAction", movepath.pop(0)))
         
-        if action == "PurchaseAction" or action == "UpgradeAction" or action == "HealAction":
+        if (action == "PurchaseAction" or action == "UpgradeAction" or action == "HealAction"):
             actionpath.append(structs.create_action(action, item))
         else:
             actionpath.append(structs.create_action(action, movepath.pop(0)))

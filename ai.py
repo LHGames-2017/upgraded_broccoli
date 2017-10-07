@@ -6,6 +6,7 @@ from search import Search
 import networkx as nx
 
 app = Flask(__name__)
+path = []
 
 def print_map(m):
     # for i in range(len(m)):
@@ -119,4 +120,3 @@ def reponse():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
-    path = []
