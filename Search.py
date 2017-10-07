@@ -13,8 +13,8 @@ class Search():
         self.interest_points = {}
         # list of objectives [ (condition, action) ]
         self.upgrade_queue = [
-                ("self.total_ressources == 15000", "self.go_upgrade(capacity)"), # update carrying capacity
-                #("self.total_ressources == 15000", self.go_upgrade()
+                ("self.total_ressources == 15000", "self.go_upgrade('CarryingCapacity')"), # update carrying capacity
+                ("self.total_ressources == 15000", "self.go_upgrade()")
                     
 
                 ]
@@ -53,7 +53,11 @@ class Search():
     def find_mine(self):
 
     # go to upgrade
-    def go_upgrade(self):
+    def go_upgrade(self, upgrade_type):
+        action = "player.upgrade(" + upgrade_type + ")"
+        return (self.go_home(), action)
+
+
         return 
 
 

@@ -112,6 +112,9 @@ class Player:
     def purchase(self, item):
         return create_action("PurchaseAction", item)
 
+    def upgrade(self, item):
+        return create_action("UpgradeAction", item)
+
 class PlayerInfo:
 
     def __init__(self, health, maxHealth, position):
