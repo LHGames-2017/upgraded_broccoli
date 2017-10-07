@@ -35,6 +35,9 @@ class Point:
     def to_tuple(self):
         return (self.X, self.Y)
 
+    def equals(self, p1):
+        return self.X == p1.X and self.Y == p1.Y
+
     def __str__(self):
         return "{{{0}, {1}}}".format(self.X, self.Y)
 
@@ -110,4 +113,8 @@ class ActionContent:
 if test:
     point = Point(2,3)
     print(point.to_tuple())
-    
+    point2 = Point(2,3)
+    point3 = Point(4,5)
+    print(point.equals(point2))
+    print(point.equals(point3))
+
