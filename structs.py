@@ -1,5 +1,26 @@
+from enum import Enum
+
+
+class TileContent(Enum):
+    Empty = 0
+    Resource = 1
+    House = 2
+    Player = 3
+    Wall = 4
+    Lava = 5
+    Shop = 6
+
+
+class Tile:
+    def __init__(self, x=0, y=0, content=4):
+        self.x = x
+        self.y = y
+        self.content = TileContent(content)
+
+
 import math
 import json
+test = False
 
 class ActionTypes:
     DefaultAction, MoveAction, AttackAction, CollectAction, UpgradeAction, StealAction, PurchaseAction = range(7)
@@ -9,12 +30,8 @@ class UpgradeType:
     CarryingCapacity, AttackPower, Defence, MaximumHealth, CollectingSpeed = range(5)
 
 
-class TileType:
-    Tile, Wall, House, Lava, Resource, Shop = range(6)
-
-
-class TileContent:
-    Empty, Resource, House, Player, Wall, Lava, Shop = range(7)
+# class TileType:
+    # Tile, Wall, House, Lava, Resource, Shop = range(6)
 
 
 class Point:
@@ -30,16 +47,19 @@ class Point:
 
     def __sub__(self, point):
         return Point(self.X - point.X, self.Y - point.Y)
+    
+    def to_tuple(self):
+        return (self.X, self.Y)
+
+    def equals(self, p1):
+        return self.X == p1.X and self.Y == p1.Y
 
     def __str__(self):
         return "{{{0}, {1}}}".format(self.X, self.Y)
 
     # Distance between two Points
     def Distance(self, p1, p2):
-        delta_x = p1.X - p2.X
-        delta_y = p1.Y - p2.Y
-        return math.sqrt(math.pow(delta_x, 2) + math.pow(delta_y, 2))
-
+        return abs(p1.X-p2.X) + abs(p1.Y-p2.Y)
 
 class GameInfo:
 
@@ -50,12 +70,11 @@ class GameInfo:
         self.Players = dict()
 
 
-class Tile:
-
-    def __init__(self, content=None, x=0, y=0):
-        self.Content = content
-        self.X = x
-        self.Y = y
+# class Tile:
+    # def __init__(self, content=None, x=0, y=0):
+        # self.Content = content
+        # self.X = x
+        # self.Y = y
 
 
 def create_action(action_type, target):
@@ -105,3 +124,12 @@ class ActionContent:
     def __init__(self, action_name, content):
         self.ActionName = action_name
         self.Content = {}
+
+if test:
+    point = Point(2,3)
+    print(point.to_tuple())
+    point2 = Point(2,3)
+    point3 = Point(4,5)
+    print(point.equals(point2))
+    print(point.equals(point3))
+
