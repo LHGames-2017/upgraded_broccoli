@@ -36,7 +36,7 @@ def bot():
     # Player info
 
     encoded_map = map_json.encode()
-    map_json = json.loads(encoded_map)
+    map_json = json.loads(encoded_map.decode('utf-8'))
     p = map_json["Player"]
     pos = p["Position"]
     x = pos["X"]
@@ -50,7 +50,6 @@ def bot():
     serialized_map = map_json["CustomSerializedMap"]
     deserialized_map = deserialize_map(serialized_map)
 
-    print(player["Position"])
     print(deserialized_map)
 
     otherPlayers = []
