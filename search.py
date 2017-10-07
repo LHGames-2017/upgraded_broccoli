@@ -70,9 +70,10 @@ class Search():
         #print(tuple(x-y for x, y in zip(player_pos, top_corner)))
         bfs_gen = nx.bfs_edges(self.graph, tuple(x-y for x, y in zip(player_pos, top_corner)))
         for node in bfs_gen:
-            print(node[1][1],node[1][0]) 
+            #print(node[1][1],node[1][0])
+            #print( self.the_map[node[1][1]][node[1][0]].content)
             if self.the_map[node[1][1]][node[1][0]].content == tile_type:
-                return self.astar(self.player.Position.to_tuple, node)
+                return self.astar( tuple(x-y for x, y in zip(player_pos, top_corner)), node[1])
             # self.graph.remove_node()
                 # print(self.astar(self.player.Position.to_tuple, node))
                 # print([tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)])
@@ -89,6 +90,6 @@ class Search():
         movepath = [structs.Point(i, j) for (i, j) in path]
         movepath, lastpoint = movepath[:-1], movepath[-1]
         lastpoint = lastpoint.to_tuple()
-        newaction = action + "Point(" + str(lastpoint[0]) + "," + str(lastpoint[1]) + ")"
+        newaction = action + "Point(" + str(lastpoint[0]) + "," + str(lastpoint[1]) + "))"
         # reste a faire des move pour tous les points dans movepath, et on eval newaction
         return (movepath, newaction)

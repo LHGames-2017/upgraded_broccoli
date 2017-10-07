@@ -113,8 +113,8 @@ def bot():
 #            return eval(lastaction)
     
     # move to tile adjacent to last action
-    target = path.pop(0)
-    return player.move(target)
+    #target = path.pop(0)
+    #return player.move(target)
 
 
 
