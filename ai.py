@@ -91,7 +91,7 @@ def bot():
     for player_dict in map_json["OtherPlayers"]:
         for player_name in player_dict.keys():
             player_info = player_dict[player_name]
-            p_pos = int(player_info["Position"])
+            p_pos = player_info["Position"]
             print("\n\n\n", p_pos)
             player_info = PlayerInfo(player_info["Health"],
                                      player_info["MaxHealth"],
@@ -99,8 +99,10 @@ def bot():
 
             otherPlayers.append({player_name: player_info })
     print(pos)
+
     # return decision
-    return player.move(Point(24, 27))
+    s = Search(graph, deserialized_map, player)
+    return s.find_best_decision()
 
 
 @app.route("/", methods=["POST"])

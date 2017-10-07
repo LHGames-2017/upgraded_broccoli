@@ -31,26 +31,26 @@ class Search():
 
     # action to do every beginning
     def indispendable_checks(self):
-        # ajuster ressources si maison
-        if self.player.Position == self.player.HouseLocation:
-            self.home_ressources += self.player.CarriedRessources
-            self.total_ressources = self.home_ressources
-
+        # TODO make sure score keep track money at home TODO
         # find if capacity is full
         if self.player.CarriedRessources == self.player.CarryingCapacity:
-            self.go_home()
+            return self.transform_path(self.go_home(), "player.move(")
 
         # find if ready for upgrade (execute first objective priority list)
         if eval(self.upgrade_queue[0][0]):
             action = self.upgrade_queue[0][1]
             self.upgrade_queue.pop(0)
             eval(action)
-    
+
+    # find best_decision
+    def find_best_decision(self):
+        self.indispendable_checks()
+        self.find_mine()
 
     # find closets mining ressources
     def find_mine(self):
-        a = "player.collect("
-        return self.transform_path(self.bfs(structs.TileContent.Resource))
+        action = "player.collect("
+        return self.transform_path(self.bfs(structs.TileContent.Resource), action)
 
     # go to upgrade
     def go_upgrade(self, upgrade_type):
