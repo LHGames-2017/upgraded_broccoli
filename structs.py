@@ -102,7 +102,7 @@ class Player:
         self.CarryingCapacity = carryingCapacity
 
     def move(self, diff):
-        target = self.Position + diff 
+        target = self.Position + diff
         print(self.Position, diff, target, type(target))
         return create_action("MoveAction", target)
 

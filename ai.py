@@ -1,7 +1,7 @@
 from flask import Flask, request
 from structs import Player, PlayerInfo, Tile, TileContent, Point
 import json
-import Search
+# import Search
 # import numpy as np
 import networkx as nx
 
@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 
 def print_map(m):
-    #for i in range(len(m)):
-    #     print([(tile.x, tile.y) for tile in m[i]])
+    # for i in range(len(m)):
+        # print([(tile.x, tile.y) for tile in m[i]])
     for i in range(len(m)):
         print([tile.content.name[0] for tile in m[i]])
 
@@ -98,7 +98,7 @@ def bot():
             otherPlayers.append({player_name: player_info })
     print(pos)
     # return decision
-    bot = Search.
+    # bot = Search.
     return player.move(Point(0, 1))
 
 
