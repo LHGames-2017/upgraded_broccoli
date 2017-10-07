@@ -99,17 +99,18 @@ def bot():
 
             otherPlayers.append({player_name: player_info })
     
-
+    s = Search(graph, deserialized_map, player)
+    print(s.find_best_decision())
     ### BOT EXECUTION
     # cherche prochaine action si path est vide
-    if len(path) == 0 and len(lastaction) == 0:
-        s = Search(graph, deserialized_map, player)
-        path, action = s.find_best_decision()
-
-        
-        
-        if len(path) == 0:
-            return eval(lastaction)
+#    if len(path) == 0 and len(lastaction) == 0:
+#        s = Search(graph, deserialized_map, player)
+#        path, action = s.find_best_decision()
+#
+#        
+#        
+#        if len(path) == 0:
+#            return eval(lastaction)
     
     # move to tile adjacent to last action
     target = path.pop(0)

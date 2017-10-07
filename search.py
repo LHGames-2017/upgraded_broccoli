@@ -8,7 +8,7 @@ class Search():
         self.player = player
         # update home ressources quand marche sur maison
         self.home_ressources = player.Score - player.CarriedRessources
-        self.total_ressources = self.home_ressources + self.CarriedRessources
+        self.total_ressources = self.home_ressources + player.CarriedRessources
         # list of objectives [ (prix, UpgradeType) ]
         self.upgrade_queue = [
                 (15000, "structs.UpgradeType.CarryingCapacity")
