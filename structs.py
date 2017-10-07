@@ -75,23 +75,23 @@ class Player:
         self.CarriedRessources = carriedRessources
         self.CarryingCapacity = carryingCapacity
 
-        def move(target):
-            return create_action("MoveAction", target)
+    def move(self, target):
+        return create_action("MoveAction", target)
 
-        def attack(target):
-            return create_action("AttackAction", target)
+    def attack(self, target):
+        return create_action("AttackAction", target)
 
-        def collect(target):
-            return create_action("CollectAction", target)
+    def collect(self, target):
+        return create_action("CollectAction", target)
 
-        def steal(target):
-            return create_action("StealAction", target)
+    def steal(self, target):
+        return create_action("StealAction", target)
 
-        def heal():
-            return create_action("HealAction", "")
+    def heal(self):
+        return create_action("HealAction", "")
 
-        def purchase(item):
-            return create_action("PurchaseAction", item)
+    def purchase(self, item):
+        return create_action("PurchaseAction", item)
 
 class PlayerInfo:
 
