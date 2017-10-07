@@ -71,6 +71,8 @@ def bot():
     serialized_map = map_json["CustomSerializedMap"]
     deserialized_map = deserialize_map(serialized_map)
 
+    print(player["Position"])
+
     otherPlayers = []
 
     for player_dict in map_json["OtherPlayers"]:
@@ -83,7 +85,7 @@ def bot():
 
             otherPlayers.append({player_name: player_info })
 
-    # return decision
+    # TODO return decision
     return create_move_action(Point(0,1))
 
 @app.route("/", methods=["POST"])
