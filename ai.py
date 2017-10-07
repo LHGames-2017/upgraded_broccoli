@@ -101,9 +101,9 @@ def bot():
     # print(pos)
 
     # return decision
-    #s = Search(graph, deserialized_map, player)
-    return player.move(Point(25,28))
-    #return s.find_best_decision()
+    s = Search(graph, deserialized_map, player)
+    # return player.move(Point(25,28))
+    return s.find_best_decision()
 
 
 @app.route("/", methods=["POST"])

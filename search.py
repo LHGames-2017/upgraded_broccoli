@@ -55,13 +55,18 @@ class Search():
         action = "player.upgrade(" + upgrade_type
         return self.transform_path(self.go_home(), action)
 
-
     # breadth first search
     def bfs(self, tile_type):
-        bfs_gen = nx.bfs_edges(self.graph, self.pos)
+        player_pos = self.player.Position.to_tuple()
+        top_corner = (self.the_map[0][0].x, self.the_map[0][0].y)
+        print(tuple(x-y for x, y in zip(player_pos, top_corner)))
+        bfs_gen = nx.bfs_edges(self.graph, tuple(x-y for x, y in zip(player_pos, top_corner)))
         for node in bfs_gen:
             if self.the_map[node[1]][node[0]].content == tile_type:
-                return self.astar(self.player.Position.to_tuple,node)
+                return self.astar(self.player.Position.to_tuple, node)
+                # print(self.astar(self.player.Position.to_tuple, node))
+                # print([tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)])
+                # return [tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)]
 
     # transform a path, to last Point, the rest
     def transform_path(self, path, action):
