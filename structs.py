@@ -1,4 +1,5 @@
 import math
+import json
 
 class ActionTypes:
     DefaultAction, MoveAction, AttackAction, CollectAction, UpgradeAction, StealAction, PurchaseAction = range(7)
@@ -57,6 +58,11 @@ class Tile:
         self.Y = y
 
 
+def create_action(action_type, target):
+    actionContent = ActionContent(action_type, target.__dict__)
+    return json.dumps(actionContent.__dict__)
+
+
 class Player:
 
     def __init__(self, health, maxHealth, position, houseLocation, score, carriedRessources,
@@ -69,6 +75,23 @@ class Player:
         self.CarriedRessources = carriedRessources
         self.CarryingCapacity = carryingCapacity
 
+        def move(target):
+            return create_action("MoveAction", target)
+
+        def attack(target):
+            return create_action("AttackAction", target)
+
+        def collect(target):
+            return create_action("CollectAction", target)
+
+        def steal(target):
+            return create_action("StealAction", target)
+
+        def heal():
+            return create_action("HealAction", "")
+
+        def purchase(item):
+            return create_action("PurchaseAction", item)
 
 class PlayerInfo:
 
