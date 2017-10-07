@@ -2,8 +2,9 @@ import networkx as nx
 import structs
 
 class Search():
-    def __init__(self, graph, player):
+    def __init__(self, graph, the_map,player):
         self.graph = graph
+        self.the_map = the_map
         self.player = player
         # update home ressources quand marche sur maison
         self.home_ressources = 0
@@ -51,7 +52,7 @@ class Search():
 
     # find closets mining ressources
     def find_mine(self):
-
+        pass
     # go to upgrade
     def go_upgrade(self, upgrade_type):
         action = "player.upgrade(" + upgrade_type + ")"
@@ -61,7 +62,8 @@ class Search():
         return 
 
 
-
-
-
-
+    def bfs(self, tile_type):
+        bfs_gen = nx.bfs_edges(self.graph,self.pos)
+        for node in bfs_gen:
+            if the_map[node[1]][node[0]].content == tile_type:
+                return astar(self.player.Position.to_tuple,node)

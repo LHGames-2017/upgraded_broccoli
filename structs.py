@@ -1,37 +1,50 @@
+import json
 from enum import Enum
 
 
 class TileContent(Enum):
     Empty = 0
-    Resource = 1
+    Wall = 1
     House = 2
-    Player = 3
-    Wall = 4
-    Lava = 5
-    Shop = 6
+    Lava = 3
+    Resource = 4
+    Shop = 5
+    Player = 6
+
+
+class ActionTypes(Enum):
+    DefaultAction = 0
+    MoveAction = 1
+    AttackAction = 2
+    CollectAction = 3
+    UpgradeAction = 4
+    StealAction = 5
+    PurchaseAction = 6
+    HealAction = 7
+
+
+class UpgradeType(Enum):
+    CarryingCapacity = 0
+    AttackPower = 1
+    Defence = 2
+    MaximumHealth = 3
+    CollectingSpeed = 4
+
+
+class PurchasableItem(Enum):
+    MicrosoftSword = 0
+    UbisoftShield = 1
+    DevolutionsBackpack = 2
+    DevolutionsPickaxe = 3
+    HealthPotion = 4
 
 
 class Tile:
+
     def __init__(self, x=0, y=0, content=4):
         self.x = x
         self.y = y
         self.content = TileContent(content)
-
-
-import math
-import json
-test = False
-
-class ActionTypes:
-    DefaultAction, MoveAction, AttackAction, CollectAction, UpgradeAction, StealAction, PurchaseAction = range(7)
-
-
-class UpgradeType:
-    CarryingCapacity, AttackPower, Defence, MaximumHealth, CollectingSpeed = range(5)
-
-
-# class TileType:
-    # Tile, Wall, House, Lava, Resource, Shop = range(6)
 
 
 class Point:
@@ -47,7 +60,7 @@ class Point:
 
     def __sub__(self, point):
         return Point(self.X - point.X, self.Y - point.Y)
-    
+
     def to_tuple(self):
         return (self.X, self.Y)
 
@@ -61,6 +74,7 @@ class Point:
     def Distance(self, p1, p2):
         return abs(p1.X-p2.X) + abs(p1.Y-p2.Y)
 
+
 class GameInfo:
 
     def __init__(self, json_dict):
@@ -68,13 +82,6 @@ class GameInfo:
         self.HouseLocation = Point(json_dict["HouseLocation"])
         self.Map = None
         self.Players = dict()
-
-
-# class Tile:
-    # def __init__(self, content=None, x=0, y=0):
-        # self.Content = content
-        # self.X = x
-        # self.Y = y
 
 
 def create_action(action_type, target):
@@ -127,12 +134,3 @@ class ActionContent:
     def __init__(self, action_name, content):
         self.ActionName = action_name
         self.Content = {}
-
-if test:
-    point = Point(2,3)
-    print(point.to_tuple())
-    point2 = Point(2,3)
-    point3 = Point(4,5)
-    print(point.equals(point2))
-    print(point.equals(point3))
-
