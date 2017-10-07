@@ -133,4 +133,4 @@ class ActionContent:
 
     def __init__(self, action_name, content):
         self.ActionName = action_name
-        self.Content = str(content) 
+        self.Content = str(content)

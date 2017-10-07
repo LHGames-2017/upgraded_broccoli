@@ -8,21 +8,19 @@ class Search():
         self.player = player
         # update home ressources quand marche sur maison
         self.home_ressources = player.Score - player.CarriedRessources
-        self.total_ressources = self.home_ressources + self.CarriedRessources
+        self.total_ressources = self.home_ressources + player.CarriedRessources
         self.home_interests_points = {}
         self.interest_points = {}
         # list of objectives [ (condition, action) ]
         self.upgrade_queue = [
-                ("self.total_ressources == 15000", "self.go_upgrade('structs.UpgradeType.CarryingCapacity')"), # update carrying capacity
-                ("self.total_ressources == 15000", "self.go_upgrade()")
-                    
-
-                ]
+            ("self.total_ressources == 15000", "self.go_upgrade('structs.UpgradeType.CarryingCapacity')"), # update carrying capacity
+            ("self.total_ressources == 15000", "self.go_upgrade()")
+        ]
 
     # Return all nodes from start to end
     def astar(self, start, end):
         return nx.astar_path(self.graph, start, end)
-    
+
     # return shortest path to home
     def go_home(self):
         home = self.player.HouseLocation.to_tuple()
@@ -67,11 +65,9 @@ class Search():
 
     # transform a path, to last Point, the rest
     def transform_path(self, path, action):
-        movepath = [structs.Point(i,j) for (i,j) in path]
+        movepath = [structs.Point(i, j) for (i, j) in path]
         movepath, lastpoint = movepath[:-1], movepath[-1]
         lastpoint = lastpoint.to_tuple()
         newaction = action + "Point(" + str(lastpoint[0]) + "," + str(lastpoint[1]) + ")"
         # reste a faire des move pour tous les points dans movepath, et on eval newaction
         return (movepath, newaction)
-
-
