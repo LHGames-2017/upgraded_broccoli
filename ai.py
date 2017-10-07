@@ -1,7 +1,7 @@
 from flask import Flask, request
 from structs import Player, PlayerInfo, Tile, TileContent, Point
 import json
-import Search
+# import Search
 # import numpy as np
 import networkx as nx
 
@@ -73,6 +73,7 @@ def bot():
 
     print(player.__dict__)
     print("MY POSITION", player.Position)
+    # print(player.__dict__)
 
     # Map
     serialized_map = map_json["CustomSerializedMap"]
@@ -80,8 +81,10 @@ def bot():
     graph = create_graph(deserialized_map)
 
     # print(deserialized_map)
+    # print(player.__dict__)
+    # print(player.Position)
     print_map(deserialized_map)
-    print(graph.nodes())
+    # print(graph.nodes())
 
     otherPlayers = []
 
@@ -95,7 +98,7 @@ def bot():
                                      Point(p_pos["X"], p_pos["Y"]))
 
             otherPlayers.append({player_name: player_info })
-
+    print(pos)
     # return decision
     return player.move(Point(24, 27))
 
