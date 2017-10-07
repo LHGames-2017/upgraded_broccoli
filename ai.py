@@ -99,23 +99,13 @@ def bot():
 
             otherPlayers.append({player_name: player_info })
     
-    s = Search(graph, deserialized_map, player)
-    print(s.find_best_decision())
-    ### BOT EXECUTION
-    # cherche prochaine action si path est vide
-#    if len(path) == 0 and len(lastaction) == 0:
-#        s = Search(graph, deserialized_map, player)
-#        path, action = s.find_best_decision()
-#
-#        
-#        
-#        if len(path) == 0:
-#            return eval(lastaction)
+    ### BISOUS
+    if len(path) == 0:
+        s = Search(graph, deserialized_map, player)
+        path = s.find_best_decision()
     
     # move to tile adjacent to last action
-    #target = path.pop(0)
-    #return player.move(target)
-
+    return path.pop(0)
 
 
 @app.route("/", methods=["POST"])
@@ -129,4 +119,3 @@ def reponse():
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
     path = []
-    lastaction = []
