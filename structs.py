@@ -3,12 +3,12 @@ from enum import Enum
 
 class TileContent(Enum):
     Empty = 0
-    Resource = 1
+    Wall = 1
     House = 2
-    Player = 3
-    Wall = 4
-    Lava = 5
-    Shop = 6
+    Lava = 3
+    Resource = 4
+    Shop = 5
+    Player = 6
 
 
 class Tile:
