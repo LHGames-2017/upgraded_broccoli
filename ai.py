@@ -7,7 +7,6 @@ import networkx as nx
 
 app = Flask(__name__)
 
-
 def print_map(m):
     # for i in range(len(m)):
         # print([(tile.x, tile.y) for tile in m[i]])
@@ -100,8 +99,10 @@ def bot():
             otherPlayers.append({player_name: player_info })
     
     ### BISOUS
+    path = []
     if len(path) == 0:
         s = Search(graph, deserialized_map, player)
+        print(s.find_best_decision())
         path = s.find_best_decision()
     
     # move to tile adjacent to last action

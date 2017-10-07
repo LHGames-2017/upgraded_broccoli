@@ -78,8 +78,8 @@ class Search():
             actionpath.append(structs.create_action("MoveAction", movepath.pop(0)))
         
         if action == "PurchaseAction" or action == "UpgradeAction" or action == "HealAction":
-            actionpath.append(structs.create_action(action, item)
+            actionpath.append(structs.create_action(action, item))
         else:
-            actionpath.append(structs.create_action(action, movepath.pop(0))
+            actionpath.append(structs.create_action(action, movepath.pop(0)))
 
         return actionpath
