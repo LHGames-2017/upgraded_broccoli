@@ -1,6 +1,7 @@
 from flask import Flask, request
 from structs import Player, PlayerInfo, Tile, TileContent, Point
 import json
+from queue import Queue
 # from search import Search
 # import numpy as np
 import networkx as nx
@@ -19,29 +20,32 @@ def manhattan_dist(start, end):
     ex, ey = end
     return abs(ex - sx) + abs(ey - sy)
 
+
+def bfs(m, g, start, gohome):
+    frontier = Queue()
+    frontier.put(start)
+    visited = {}
+    visited[start] = True
+
+    while not frontier.empty():
+        current = frontier.get()
+        for n in g.neighbors(current):
+            if n not in visited:
+                if gohome and m[n[1]][n[0]].content == TileContent.House:
+                    return n
+                elif not gohome and m[n[1]][n[0]].content == TileContent.Resource:
+                    return n
+                frontier.put(n)
+                visited[n] = True
+
+
 def do_something(p, m, g):
-    # print(p.__dict__)
-    # print_map(m)
+    print(p.__dict__)
+    print_map(m)
     # print(g.nodes())
 
     player_pos = (p.Position.to_tuple()[0] - m[0][0].x, p.Position.to_tuple()[1] - m[0][0].y)
-    dest_pos = None
-
-    if (p.CarriedRessources < p.CarryingCapacity):
-        for i in range(len(m)):
-            for j in range(len(m)):
-                if (m[j][i].content == TileContent.Resource):
-                    dest_pos = (i, j)
-                    break
-    else:
-        for i in range(len(m)):
-            for j in range(len(m)):
-                if (m[j][i].content == TileContent.House):
-                    dest_pos = (i, j)
-                    break
-
-
-    # if dest_pos is not None:
+    dest_pos = bfs(m, g, player_pos, p.CarriedRessources == p.CarryingCapacity)
     next_pos = nx.astar_path(g, player_pos, dest_pos)[1]
 
     # print(player_pos)
@@ -51,17 +55,6 @@ def do_something(p, m, g):
         if (p.CarriedRessources < p.CarryingCapacity):
             return p.collect(Point(next_pos[0] + m[0][0].x, next_pos[1] + m[0][0].y))
     return p.move(Point(next_pos[0] + m[0][0].x, next_pos[1] + m[0][0].y))
-
-    # return p.move(Point(1,1)) # TODO
-
-    # TODO Get closest resource manhattan dist
-    # print(player_pos_relative)
-    # print((j, i))
-    # print((j, i))
-    # print(p.Position.to_tuple())
-    # print(manhattan_dist(p.Position.to_tuple(), (j, i)))
-    # print(m[j][i].content == TileContent.Resources)
-    # return p.move(Point(1, 1))
 
 
 def create_graph(tiles):
