@@ -1,18 +1,67 @@
 from flask import Flask, request
 from structs import Player, PlayerInfo, Tile, TileContent, Point
 import json
-from search import Search
+# from search import Search
 # import numpy as np
 import networkx as nx
 
 app = Flask(__name__)
-path = []
+
 
 def print_map(m):
     # for i in range(len(m)):
         # print([(tile.x, tile.y) for tile in m[i]])
     for i in range(len(m)):
         print([tile.content.name[0] for tile in m[i]])
+
+def manhattan_dist(start, end):
+    sx, sy = start
+    ex, ey = end
+    return abs(ex - sx) + abs(ey - sy)
+
+def do_something(p, m, g):
+    print(p.__dict__)
+    print_map(m)
+    # print(g.nodes())
+
+    player_pos = (p.Position.to_tuple()[0] - m[0][0].x, p.Position.to_tuple()[1] - m[0][0].y)
+    dest_pos = None
+
+    if (p.CarriedRessources < p.CarryingCapacity):
+        for i in range(len(m)):
+            for j in range(len(m)):
+                if (m[j][i].content == TileContent.Resource):
+                    dest_pos = (i, j)
+                    break
+    else:
+        for i in range(len(m)):
+            for j in range(len(m)):
+                if (m[j][i].content == TileContent.House):
+                    dest_pos = (i, j)
+                    break
+
+
+    # if dest_pos is not None:
+    next_pos = nx.astar_path(g, player_pos, dest_pos)[1]
+
+    # print(player_pos)
+    # print(dest_pos)
+    # print(next_pos)
+    if next_pos == dest_pos:
+        if (p.CarriedRessources < p.CarryingCapacity):
+            return p.collect(Point(next_pos[0] + m[0][0].x, next_pos[1] + m[0][0].y))
+    return p.move(Point(next_pos[0] + m[0][0].x, next_pos[1] + m[0][0].y))
+
+    # return p.move(Point(1,1)) # TODO
+
+    # TODO Get closest resource manhattan dist
+    # print(player_pos_relative)
+    # print((j, i))
+    # print((j, i))
+    # print(p.Position.to_tuple())
+    # print(manhattan_dist(p.Position.to_tuple(), (j, i)))
+    # print(m[j][i].content == TileContent.Resources)
+    # return p.move(Point(1, 1))
 
 
 def create_graph(tiles):
@@ -24,8 +73,8 @@ def create_graph(tiles):
                 graph.remove_node((j, i))
             elif tiles[i][j].content == TileContent.Wall:
                 graph.remove_node((j, i))
-            elif tiles[i][j].content == TileContent.Player:
-                graph.remove_node((j, i))
+            # elif tiles[i][j].content == TileContent.Player:
+                # graph.remove_node((j, i))
 
     return graph
 
@@ -83,7 +132,7 @@ def bot():
     # print(deserialized_map)
     # print(player.__dict__)
     # print(player.Position)
-    print_map(deserialized_map)
+    # print_map(deserialized_map)
     # print(graph.nodes())
 
     otherPlayers = []
@@ -98,16 +147,23 @@ def bot():
                                      Point(p_pos["X"], p_pos["Y"]))
 
             otherPlayers.append({player_name: player_info })
-    
-    ### >:(
-    path = []
-    if len(path) == 0:
-        s = Search(graph, deserialized_map, player)
-        print(s.find_best_decision())
-        path = s.find_best_decision()
-    
+
+    return do_something(player, deserialized_map, graph)
+    # s = Search(graph, deserialized_map, player)
+    # print(s.find_best_decision())
+    ### BOT EXECUTION
+    # cherche prochaine action si path est vide
+    #    if len(path) == 0 and len(lastaction) == 0:
+    #        s = Search(graph, deserialized_map, player)
+    #        path, action = s.find_best_decision()
+
+    #        if len(path) == 0:
+    #            return eval(lastaction)
+
     # move to tile adjacent to last action
-    return path.pop(0)
+    #target = path.pop(0)
+    #return player.move(target)
+
 
 
 @app.route("/", methods=["POST"])
@@ -120,3 +176,5 @@ def reponse():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)
+    path = []
+    lastaction = []
