@@ -7,9 +7,8 @@ class Search():
         self.the_map = the_map
         self.player = player
         # update home ressources quand marche sur maison
-        self.home_ressources = 0
-        self.total_ressources = 0
-
+        self.home_ressources = player.Score - player.CarriedRessources
+        self.total_ressources = self.home_ressources + self.CarriedRessources
         self.home_interests_points = {}
         self.interest_points = {}
         # list of objectives [ (condition, action) ]
@@ -71,7 +70,7 @@ class Search():
         movepath = [structs.Point(i,j) for (i,j) in path]
         movepath, lastpoint = movepath[:-1], movepath[-1]
         lastpoint = lastpoint.to_tuple()
-        newaction = action + "Point(" + str(lastpoint[0]) + "," str(lastpoint[1]) + ")"
+        newaction = action + "Point(" + str(lastpoint[0]) + "," + str(lastpoint[1]) + ")"
         # reste a faire des move pour tous les points dans movepath, et on eval newaction
         return (movepath, newaction)
 

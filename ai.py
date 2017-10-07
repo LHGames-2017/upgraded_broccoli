@@ -72,6 +72,7 @@ def bot():
                     p["CarriedResources"], p["CarryingCapacity"])
 
     print(player.__dict__)
+    print("MY POSITION", player.Position)
 
     # Map
     serialized_map = map_json["CustomSerializedMap"]
@@ -96,8 +97,7 @@ def bot():
             otherPlayers.append({player_name: player_info })
 
     # return decision
-    bot = Search.
-    return player.move(Point(0, 1))
+    return player.move(Point(24, 27))
 
 
 @app.route("/", methods=["POST"])
