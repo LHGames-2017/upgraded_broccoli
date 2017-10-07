@@ -1,15 +1,33 @@
 from flask import Flask, request
-from structs import *
+from structs import Player, PlayerInfo, Tile, TileContent, Point
 import json
 import Search
 # import numpy as np
+import networkx as nx
 
 app = Flask(__name__)
 
 
 def print_map(m):
+    # for i in range(len(m)):
+        # print([(tile.x, tile.y) for tile in m[i]])
     for i in range(len(m)):
         print([tile.content.name[0] for tile in m[i]])
+
+
+def create_graph(tiles):
+    graph = nx.grid_graph([20, 20])
+
+    for i in range(20):
+        for j in range(20):
+            if tiles[i][j].content == TileContent.Lava:
+                graph.remove_node((j, i))
+            elif tiles[i][j].content == TileContent.Wall:
+                graph.remove_node((j, i))
+            elif tiles[i][j].content == TileContent.Player:
+                graph.remove_node((j, i))
+
+    return graph
 
 
 def deserialize_map(serialized_map):
@@ -19,7 +37,7 @@ def deserialize_map(serialized_map):
     serialized_map = serialized_map[1:]
     rows = serialized_map.split('[')
     column = rows[0].split('{')
-    deserialized_map = [[Tile() for x in range(20)] for y in range(20)] # TODO
+    deserialized_map = [[Tile() for x in range(20)] for y in range(20)]
     for i in range(len(rows) - 1):
         column = rows[i + 1].split('{')
 
@@ -29,7 +47,7 @@ def deserialize_map(serialized_map):
             x = int(infos[1])
             y = int(infos[2][:end_index])
             content = int(infos[0])
-            deserialized_map[i][j] = Tile(x, y, content)
+            deserialized_map[j][i] = Tile(x, y, content)
 
     return deserialized_map
 
@@ -58,9 +76,11 @@ def bot():
     # Map
     serialized_map = map_json["CustomSerializedMap"]
     deserialized_map = deserialize_map(serialized_map)
+    graph = create_graph(deserialized_map)
 
     # print(deserialized_map)
     print_map(deserialized_map)
+    print(graph.nodes())
 
     otherPlayers = []
 
