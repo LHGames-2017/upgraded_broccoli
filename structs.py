@@ -1,22 +1,23 @@
 import math
+import json
 
-class ActionTypes():
+class ActionTypes:
     DefaultAction, MoveAction, AttackAction, CollectAction, UpgradeAction, StealAction, PurchaseAction = range(7)
 
 
-class UpgradeType():
+class UpgradeType:
     CarryingCapacity, AttackPower, Defence, MaximumHealth, CollectingSpeed = range(5)
 
 
-class TileType():
+class TileType:
     Tile, Wall, House, Lava, Resource, Shop = range(6)
 
 
-class TileContent():
+class TileContent:
     Empty, Resource, House, Player, Wall, Lava, Shop = range(7)
 
 
-class Point(object):
+class Point:
 
     # Constructor
     def __init__(self, X=0, Y=0):
@@ -40,7 +41,7 @@ class Point(object):
         return math.sqrt(math.pow(delta_x, 2) + math.pow(delta_y, 2))
 
 
-class GameInfo(object):
+class GameInfo:
 
     def __init__(self, json_dict):
         self.__dict__ = json_dict
@@ -49,7 +50,7 @@ class GameInfo(object):
         self.Players = dict()
 
 
-class Tile(object):
+class Tile:
 
     def __init__(self, content=None, x=0, y=0):
         self.Content = content
@@ -57,7 +58,12 @@ class Tile(object):
         self.Y = y
 
 
-class Player(object):
+def create_action(action_type, target):
+    actionContent = ActionContent(action_type, target.__dict__)
+    return json.dumps(actionContent.__dict__)
+
+
+class Player:
 
     def __init__(self, health, maxHealth, position, houseLocation, score, carriedRessources,
                  carryingCapacity=1000):
@@ -69,15 +75,32 @@ class Player(object):
         self.CarriedRessources = carriedRessources
         self.CarryingCapacity = carryingCapacity
 
+        def move(target):
+            return create_action("MoveAction", target)
 
-class PlayerInfo(object):
+        def attack(target):
+            return create_action("AttackAction", target)
+
+        def collect(target):
+            return create_action("CollectAction", target)
+
+        def steal(target):
+            return create_action("StealAction", target)
+
+        def heal():
+            return create_action("HealAction", "")
+
+        def purchase(item):
+            return create_action("PurchaseAction", item)
+
+class PlayerInfo:
 
     def __init__(self, health, maxHealth, position):
         self.Health = health
         self.MaxHealth = maxHealth
         self.Position = position
 
-class ActionContent(object):
+class ActionContent:
 
     def __init__(self, action_name, content):
         self.ActionName = action_name
