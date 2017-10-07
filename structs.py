@@ -1,5 +1,6 @@
 import math
 import json
+test = False
 
 class ActionTypes:
     DefaultAction, MoveAction, AttackAction, CollectAction, UpgradeAction, StealAction, PurchaseAction = range(7)
@@ -30,6 +31,9 @@ class Point:
 
     def __sub__(self, point):
         return Point(self.X - point.X, self.Y - point.Y)
+    
+    def to_tuple(self):
+        return (self.X, self.Y)
 
     def __str__(self):
         return "{{{0}, {1}}}".format(self.X, self.Y)
@@ -102,3 +106,8 @@ class ActionContent:
     def __init__(self, action_name, content):
         self.ActionName = action_name
         self.Content = {}
+
+if test:
+    point = Point(2,3)
+    print(point.to_tuple())
+    
