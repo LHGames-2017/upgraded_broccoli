@@ -39,6 +39,8 @@ class Search():
         # find if capacity is full
         if self.player.CarriedRessources == self.player.CarryingCapacity:
             return self.transform_path(self.go_home(), "MoveAction")
+        else:
+            return self.find_mine()
             
         
 
