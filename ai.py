@@ -71,7 +71,7 @@ def bot():
                     Point(house["X"], house["Y"]), p["Score"],
                     p["CarriedResources"], p["CarryingCapacity"])
 
-    print(player.__dict__)
+    # print(player.__dict__)
 
     # Map
     serialized_map = map_json["CustomSerializedMap"]
@@ -79,8 +79,10 @@ def bot():
     graph = create_graph(deserialized_map)
 
     # print(deserialized_map)
+    # print(player.__dict__)
+    # print(player.Position)
     print_map(deserialized_map)
-    print(graph.nodes())
+    # print(graph.nodes())
 
     otherPlayers = []
 
