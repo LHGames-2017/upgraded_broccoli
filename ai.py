@@ -57,7 +57,8 @@ def bot():
     for player_dict in map_json["OtherPlayers"]:
         for player_name in player_dict.keys():
             player_info = player_dict[player_name]
-            p_pos = player_info["Position"]
+            p_pos = int(player_info["Position"])
+            print("\n\n\n", p_pos)
             player_info = PlayerInfo(player_info["Health"],
                                      player_info["MaxHealth"],
                                      Point(p_pos["X"], p_pos["Y"]))
