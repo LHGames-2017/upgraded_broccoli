@@ -119,8 +119,8 @@ class Player:
     def purchase(self, item):
         return create_action("PurchaseAction", item)
 
-    def upgrade(self, upgrade_type, item):
-        return create_action("UpgradeAction", upgrade_type, item)
+    def upgrade(self, upgrade_type):
+        return create_action("UpgradeAction", upgrade_type)
 
 class PlayerInfo:
 

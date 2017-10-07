@@ -9,15 +9,21 @@ class Search():
         # update home ressources quand marche sur maison
         self.home_ressources = player.Score - player.CarriedRessources
         self.total_ressources = self.home_ressources + self.CarriedRessources
-        self.home_interests_points = {}
-        self.interest_points = {}
-        # list of objectives [ (condition, action) ]
+        # list of objectives [ (prix, UpgradeType) ]
         self.upgrade_queue = [
-                ("self.total_ressources == 15000", "self.go_upgrade('structs.UpgradeType.CarryingCapacity')"), # update carrying capacity
-                ("self.total_ressources == 15000", "self.go_upgrade()")
-                    
+                (15000, "structs.UpgradeType.CarryingCapacity")
 
                 ]
+        # action list in prettier form
+        self.action_list = {
+                'move' : 'player.move(',
+                'attack' :'player.attack(',
+                'collect' : 'player.collect(',
+                'upgrade' : 'player.upgrade(',
+                'steal' : 'player.steal(',
+                'purchase' : 'player.purchase(',
+                'heal' : 'player.heal('
+                }
 
     # Return all nodes from start to end
     def astar(self, start, end):
@@ -32,15 +38,22 @@ class Search():
     # action to do every beginning
     def indispendable_checks(self):
         # TODO make sure score keep track money at home TODO
+        # Am I home?
+        if self.player.Position == self.player.HouseLocation:
+            price, upgrade_type = self.upgrade_queue[0]
+            if self.total_ressources >= price:
+                return ([], self.action_list['upgrade'] + upgrade_type + ")")
+            else:
+                return self.find_mine()
+
         # find if capacity is full
         if self.player.CarriedRessources == self.player.CarryingCapacity:
-            return self.transform_path(self.go_home(), "player.move(")
+            return self.transform_path(self.go_home(), self.action_list['move'])
+        else:
 
-        # find if ready for upgrade (execute first objective priority list)
-        if eval(self.upgrade_queue[0][0]):
-            action = self.upgrade_queue[0][1]
-            self.upgrade_queue.pop(0)
-            eval(action)
+        
+            
+        
 
     # find best_decision
     def find_best_decision(self):
@@ -49,12 +62,12 @@ class Search():
 
     # find closets mining ressources
     def find_mine(self):
-        action = "player.collect("
+        action = self.action_list['collect']
         return self.transform_path(self.bfs(structs.TileContent.Resource), action)
 
     # go to upgrade
     def go_upgrade(self, upgrade_type):
-        action = "player.upgrade(" + upgrade_type
+        action = self.action_list['upgrade'] + upgrade_type
         return self.transform_path(self.go_home(), action)
 
 
@@ -68,7 +81,11 @@ class Search():
     # transform a path, to last Point, the rest
     def transform_path(self, path, action):
         movepath = [structs.Point(i,j) for (i,j) in path]
-        movepath, lastpoint = movepath[:-1], movepath[-1]
+        # gerer le cas si path de 1 point seulement
+        if len(movepath) > 1:
+            movepath, lastpoint = movepath[:-1], movepath[-1]
+        else:
+            lastpoint = movepath.pop(0)
         lastpoint = lastpoint.to_tuple()
         newaction = action + "Point(" + str(lastpoint[0]) + "," + str(lastpoint[1]) + ")"
         # reste a faire des move pour tous les points dans movepath, et on eval newaction
