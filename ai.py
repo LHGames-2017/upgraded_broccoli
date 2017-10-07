@@ -1,7 +1,7 @@
 from flask import Flask, request
 from structs import Player, PlayerInfo, Tile, TileContent, Point
 import json
-# import Search
+from search import Search
 # import numpy as np
 import networkx as nx
 
@@ -71,8 +71,8 @@ def bot():
                     Point(house["X"], house["Y"]), p["Score"],
                     p["CarriedResources"], p["CarryingCapacity"])
 
-    print(player.__dict__)
-    print("MY POSITION", player.Position)
+    # print(player.__dict__)
+    # print("MY POSITION", player.Position)
     # print(player.__dict__)
 
     # Map
@@ -92,14 +92,14 @@ def bot():
         for player_name in player_dict.keys():
             player_info = player_dict[player_name]
             p_pos = player_info["Position"]
-            print("\n\n\n", p_pos)
+            # print("\n\n\n", p_pos)
             player_info = PlayerInfo(player_info["Health"],
                                      player_info["MaxHealth"],
                                      Point(p_pos["X"], p_pos["Y"]))
 
             otherPlayers.append({player_name: player_info })
-    print(pos)
     
+
     ### BOT EXECUTION
     # cherche prochaine action si path est vide
     if len(path) == 0:

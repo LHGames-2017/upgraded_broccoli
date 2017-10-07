@@ -24,11 +24,19 @@ class Search():
                 'purchase' : 'player.purchase(',
                 'heal' : 'player.heal('
                 }
+        self.total_ressources = self.home_ressources + player.CarriedRessources
+        self.home_interests_points = {}
+        self.interest_points = {}
+        # list of objectives [ (condition, action) ]
+        self.upgrade_queue = [
+            ("self.total_ressources == 15000", "self.go_upgrade('structs.UpgradeType.CarryingCapacity')"), # update carrying capacity
+            ("self.total_ressources == 15000", "self.go_upgrade()")
+        ]
 
     # Return all nodes from start to end
     def astar(self, start, end):
         return nx.astar_path(self.graph, start, end)
-    
+
     # return shortest path to home
     def go_home(self):
         home = self.player.HouseLocation.to_tuple()
@@ -70,13 +78,18 @@ class Search():
         action = self.action_list['upgrade'] + upgrade_type
         return self.transform_path(self.go_home(), action)
 
-
     # breadth first search
     def bfs(self, tile_type):
-        bfs_gen = nx.bfs_edges(self.graph, self.pos)
+        player_pos = self.player.Position.to_tuple()
+        top_corner = (self.the_map[0][0].x, self.the_map[0][0].y)
+        print(tuple(x-y for x, y in zip(player_pos, top_corner)))
+        bfs_gen = nx.bfs_edges(self.graph, tuple(x-y for x, y in zip(player_pos, top_corner)))
         for node in bfs_gen:
             if self.the_map[node[1]][node[0]].content == tile_type:
-                return self.astar(self.player.Position.to_tuple,node)
+                return self.astar(self.player.Position.to_tuple, node)
+                # print(self.astar(self.player.Position.to_tuple, node))
+                # print([tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)])
+                # return [tuple(x+y for x,y in zip(n, top_corner)) for n in self.astar(self.player.Position.to_tuple, node)]
 
     # transform a path, to last Point, the rest
     def transform_path(self, path, action):
@@ -86,9 +99,9 @@ class Search():
             movepath, lastpoint = movepath[:-1], movepath[-1]
         else:
             lastpoint = movepath.pop(0)
+        movepath = [structs.Point(i, j) for (i, j) in path]
+        movepath, lastpoint = movepath[:-1], movepath[-1]
         lastpoint = lastpoint.to_tuple()
         newaction = action + "Point(" + str(lastpoint[0]) + "," + str(lastpoint[1]) + ")"
         # reste a faire des move pour tous les points dans movepath, et on eval newaction
         return (movepath, newaction)
-
-
