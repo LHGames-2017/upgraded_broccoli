@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 
 def print_map(m):
-    # for i in range(len(m)):
-        # print([(tile.x, tile.y) for tile in m[i]])
+    #for i in range(len(m)):
+    #     print([(tile.x, tile.y) for tile in m[i]])
     for i in range(len(m)):
         print([tile.content.name[0] for tile in m[i]])
 
@@ -94,7 +94,7 @@ def bot():
                                      Point(p_pos["X"], p_pos["Y"]))
 
             otherPlayers.append({player_name: player_info })
-
+    print(pos)
     # return decision
     bot = Search.
     return player.move(Point(0, 1))
