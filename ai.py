@@ -20,8 +20,8 @@ def manhattan_dist(start, end):
     return abs(ex - sx) + abs(ey - sy)
 
 def do_something(p, m, g):
-    print(p.__dict__)
-    print_map(m)
+    # print(p.__dict__)
+    # print_map(m)
     # print(g.nodes())
 
     player_pos = (p.Position.to_tuple()[0] - m[0][0].x, p.Position.to_tuple()[1] - m[0][0].y)
